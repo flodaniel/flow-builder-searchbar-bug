@@ -1,0 +1,56 @@
+import 'package:example/location_flow/location_flow.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+void main() => runApp(MyApp(locationRepository: LocationRepository()));
+
+class MyApp extends StatelessWidget {
+  MyApp({Key? key, required LocationRepository locationRepository})
+      : _locationRepository = locationRepository,
+        super(key: key);
+
+  final LocationRepository _locationRepository;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider.value(
+      value: _locationRepository,
+      child: MaterialApp(home: Home()),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: Builder(
+        builder: (context) {
+          return ListView(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.location_city),
+                title: const Text('Location Flow'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final location = await Navigator.of(context).push(
+                    LocationFlow.route(),
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text('Location Flow Complete!\n$location'),
+                      ),
+                    );
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
