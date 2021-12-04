@@ -40,7 +40,8 @@ class CountrySelectionForm extends StatelessWidget {
           children: [
             BlocBuilder<CountrySelectionCubit, LocationState>(
               builder: (context, state) {
-                return FloatingSearchBar(builder: (_, __) => Container());
+                return Expanded(
+                    child: FloatingSearchBar(builder: (_, __) => Container()));
               },
             ),
             BlocBuilder<CountrySelectionCubit, LocationState>(
