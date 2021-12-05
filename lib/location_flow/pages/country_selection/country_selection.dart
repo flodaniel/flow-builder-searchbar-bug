@@ -2,7 +2,6 @@ import 'package:example/location_flow/location_flow.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'country_selection_cubit.dart';
 
@@ -40,8 +39,22 @@ class CountrySelectionForm extends StatelessWidget {
           children: [
             BlocBuilder<CountrySelectionCubit, LocationState>(
               builder: (context, state) {
-                return Expanded(
-                    child: FloatingSearchBar(builder: (_, __) => Container()));
+                switch (state.status) {
+                  case LocationStatus.initial:
+                  case LocationStatus.loading:
+                    return LoadingIndicator();
+                  case LocationStatus.success:
+                    return DropdownMenu(
+                      hint: const Text('Select a Country'),
+                      items: state.locations,
+                      value: state.selectedLocation,
+                      onChanged: (value) => context
+                          .read<CountrySelectionCubit>()
+                          .countrySelected(value),
+                    );
+                  default:
+                    return LocationError();
+                }
               },
             ),
             BlocBuilder<CountrySelectionCubit, LocationState>(
@@ -49,9 +62,8 @@ class CountrySelectionForm extends StatelessWidget {
                 return TextButton(
                   child: const Text('Submit'),
                   onPressed: state.selectedLocation != null
-                      ? () => context
-                          .flow<Location>()
-                          .update((s) => s.copyWith(country: 'TestCountry'))
+                      ? () => context.flow<Location>().update(
+                          (s) => s.copyWith(country: state.selectedLocation))
                       : null,
                 );
               },

@@ -2,6 +2,7 @@ import 'package:example/location_flow/location_flow.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'state_selection_cubit.dart';
 
@@ -37,6 +38,14 @@ class StateSelectionForm extends StatelessWidget {
           children: [
             BlocBuilder<StateSelectionCubit, LocationState>(
               builder: (context, state) {
+                return Expanded(
+                  child: FloatingSearchBar(
+                    automaticallyImplyBackButton: false,
+                    builder:
+                        (BuildContext context, Animation<double> transition) =>
+                            Container(),
+                  ),
+                );
                 switch (state.status) {
                   case LocationStatus.initial:
                   case LocationStatus.loading:

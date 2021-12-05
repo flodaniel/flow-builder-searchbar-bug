@@ -27,9 +27,11 @@ class LocationFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const FlowBuilder<Location>(
-      state: Location(),
-      onGeneratePages: onGenerateLocationPages,
+    return Scaffold(
+      body: const FlowBuilder<Location>(
+        state: Location(),
+        onGeneratePages: onGenerateLocationPages,
+      ),
     );
   }
 }
